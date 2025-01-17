@@ -1,4 +1,4 @@
-package com.core.finanja.logueo.model;
+package com.core.finanja.logueo.model.data;
 
 import jakarta.persistence.*;
 import lombok.Data;
