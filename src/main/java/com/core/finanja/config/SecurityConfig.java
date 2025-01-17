@@ -1,4 +1,4 @@
-package com.core.finanja.logueo.config;
+package com.core.finanja.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
