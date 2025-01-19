@@ -18,10 +18,9 @@ public class LogueoOAuth2 {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @Column(nullable = false, length = 50)
     private String proveedor;
 
-    @Column(name = "external_id", nullable = false, length = 255)
+    @Column(name = "external_id")
     private String externalId;
 
     private String token;

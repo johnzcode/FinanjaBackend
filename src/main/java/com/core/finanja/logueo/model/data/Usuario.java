@@ -15,24 +15,23 @@ public class Usuario {
     @GeneratedValue
     private UUID id;
 
-    @Column(name = "nombres", nullable = false, length = 50)
+    @Column(name = "nombres")
     private String names;
 
-    @Column(name = "apellidos", nullable = false, length = 50)
+    @Column(name = "apellidos")
     private String lastName;
 
-    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(name = "usuario", unique = true, length = 50)
+    @Column(name = "usuario")
     private String user;
 
-    @Column(nullable = false)
     private String password;
+
 
     private String sexo;
 
-    @Column(name = "fecha_Registro", updatable = false)
+    @Column(name = "fecha_Registro")
     private LocalDate fechaRegistro = LocalDate.now();
 
     private String moneda;
