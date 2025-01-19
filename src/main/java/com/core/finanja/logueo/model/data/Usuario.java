@@ -28,7 +28,6 @@ public class Usuario {
 
     private String password;
 
-
     private String sexo;
 
     @Column(name = "fecha_Registro")

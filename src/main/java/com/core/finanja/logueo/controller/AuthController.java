@@ -1,13 +1,14 @@
 package com.core.finanja.logueo.controller;
 
+import com.core.finanja.config.security.TokenResponse;
 import com.core.finanja.logueo.model.AuthResponse;
 import com.core.finanja.logueo.model.DTO.LoginRequest;
 import com.core.finanja.logueo.model.data.Usuario;
 import com.core.finanja.logueo.service.AuthService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,11 +22,38 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Usuario usuario) throws Exception{
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
 
-        Map<String, Object> response = null;
-        AuthResponse responseBody = null;
+        Map<String, Object> response;
+
+        try {
+            response = new HashMap<>();
+
+            Optional<OAuth2AccessTokenResponse> tokenOptional = authService.login(
+                    loginRequest.getEmailOrUsername(),
+                    loginRequest.getPassword()
+            );
+
+            if (tokenOptional.isPresent()){
+                OAuth2AccessTokenResponse tokenResponse = tokenOptional.get();
+                response = TokenResponse.formatTokenResponse(tokenResponse);
+                return ResponseEntity.ok().body(response);
+            }else {
+                response.put("success", false);
+                response.put("msg", "Credenciales invalidas");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el servidor");
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Usuario usuario) {
+
+        Map<String, Object> response;
+        AuthResponse responseBody;
 
         try{
             responseBody = this.authService.register(usuario);
@@ -46,23 +74,4 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        JSONObject response = null;
-        try {
-            response = new JSONObject();
-
-            Optional<String> tokenOptional = authService.login(loginRequest.getEmailOrUsername(), loginRequest.getPassword());
-
-            if (tokenOptional.isPresent()){
-                response.put("Bearer", tokenOptional.get());
-                return ResponseEntity.ok().body(response.toString());
-            }else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales invalidas");
-            }
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el servidor");
-        }
-
-    }
 }
