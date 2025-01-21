@@ -2,6 +2,7 @@ package com.core.finanja.config;
 
 import com.core.finanja.config.security.KeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,9 @@ public class SecurityConfig {
 
     @Autowired
     private AuthenticationEntryPoint authenticationEntryPoint;
+
+    @Value("${decryption.key}")
+    private String publicKeyPath;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -55,7 +59,6 @@ public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder() throws Exception {
 
-        String publicKeyPath = "D:\\APRENDIZAJE\\JAVA\\CERTIFICADO\\public.key";
         RSAPublicKey publicKey = KeyUtil.getPublicKey(publicKeyPath);
 
         return NimbusJwtDecoder.withPublicKey(publicKey).build();

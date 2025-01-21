@@ -2,6 +2,7 @@ package com.core.finanja.config.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.stereotype.Component;
@@ -17,11 +18,8 @@ public class JwtUtils {
     private RSAPrivateKey privateKey;
     private RSAPublicKey publicKey;
 
-    public JwtUtils() {
+    public JwtUtils(@Value("${encryption.key}") String privateKeyPath, @Value("${decryption.key}") String publicKeyPath) {
         try {
-
-            String privateKeyPath = "D:\\APRENDIZAJE\\JAVA\\CERTIFICADO\\private.key";
-            String publicKeyPath = "D:\\APRENDIZAJE\\JAVA\\CERTIFICADO\\public.key";
 
             this.privateKey = KeyUtil.getPrivateKey(privateKeyPath);
             this.publicKey = KeyUtil.getPublicKey(publicKeyPath);
