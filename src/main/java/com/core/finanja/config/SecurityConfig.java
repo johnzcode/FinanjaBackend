@@ -57,10 +57,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder() throws Exception {
-
-        RSAPublicKey publicKey = KeyUtil.getPublicKey(publicKeyPath);
-
-        return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    public JwtDecoder jwtDecoder() {
+        try {
+            RSAPublicKey publicKey = KeyUtil.getPublicKey(publicKeyPath);
+            return NimbusJwtDecoder.withPublicKey(publicKey).build();
+        } catch (Exception e) {
+            throw new RuntimeException("Error loading public key", e);
+        }
     }
 }
