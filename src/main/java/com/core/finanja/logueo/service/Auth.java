@@ -38,7 +38,7 @@ public class Auth implements AuthService {
                 if (passwordEncoder.matches(password, user.getPassword())) {
                     return Optional.of(jwtUtils.generateTokens(user.getUser()));
                 }else {
-                    System.out.println("Contraseña invalida");
+                    System.out.println("Password invalida");
                 }
             }else {
                 System.out.println("Usuario no encontrado");
